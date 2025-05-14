@@ -1,0 +1,27 @@
+import nessid from 'apinessid';
+
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) throw `*Example:* ${usedPrefix + command} https://www.youtube.com/watch?v=Z28dtg_QmFw`;
+  m.reply(wait);
+  try {
+    const result = await nessid.YTMP3Dl(text);
+    // result = { message, data: { title, thumbnail, downloadUrl } }
+    if (result && result.data && result.data.downloadUrl) {
+      await conn.sendMessage(m.chat, {
+        audio: { url: result.data.downloadUrl },
+        mimetype: 'audio/mpeg',
+        fileName: result.data.title ? `${result.data.title}.mp3` : undefined
+      }, { quoted: m });
+    } else {
+      throw 'Error: Unable to fetch audio';
+    }
+  } catch (error) {
+    throw `🚩 Gagal mengambil audio!`;
+  }
+};
+
+handler.help = handler.command = ['ytmp3', 'yta'];
+handler.tags = ['downloader'];
+handler.limit = true;
+
+export default handler;
