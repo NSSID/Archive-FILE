@@ -1,0 +1,51 @@
+import nessid from 'apinessid';
+
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    if (!text) throw `Masukan URL!\n\ncontoh:\n${usedPrefix + command} https://vm.tiktok.com/ZGJAmhSrp/`;    
+    if (!/tiktok|douyin/i.test(text)) throw `URL Tidak Ditemukan!`;
+
+    m.reply(wait);
+
+    try {
+        // Panggil TTDl dari nessid
+        const res = await nessid.TTDl(text);
+
+        // Ambil data yang diperlukan, jangan tampilkan developer dan thumbnail!
+        const { title, title_audio, video, audio } = res;
+
+        let capt = `乂 *T I K T O K*\n\n`;
+        capt += `◦ *Title* : ${title}\n\n`;
+
+        // Kirim video (bisa satu atau banyak)
+        if (Array.isArray(video) && video.length > 0) {
+            for (let v of video) {
+                await conn.sendFile(m.chat, v, null, capt, m);
+            }
+        } else {
+            throw 'Video tidak ditemukan!';
+        }
+
+        // Kirim audio jika tersedia
+        if (Array.isArray(audio) && audio.length > 0 && audio[0]) {
+            await conn.sendMessage(m.chat, { audio: { url: audio[0] }, mimetype: 'audio/mpeg' }, { quoted: m });
+        } else {
+            await conn.reply(m.chat, "_Audio tidak tersedia!_", m);
+        }
+    } catch (e) {
+        throw `Gagal mengambil data TikTok!\n\n${e}`;
+    }
+};
+
+handler.help = ['tiktok'];
+handler.command = /^(tiktok|tt|tiktokdl|tiktoknowm)$/i;
+handler.tags = ['downloader'];
+handler.limit = true;
+handler.group = false;
+handler.premium = false;
+handler.owner = false;
+handler.admin = false;
+handler.botAdmin = false;
+handler.fail = null;
+handler.private = false;
+
+export default handler;
