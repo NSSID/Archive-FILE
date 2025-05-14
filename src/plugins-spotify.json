@@ -1,0 +1,38 @@
+import nessid from 'apinessid';
+
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  if (!args[0]) throw `*🚩 Masukkan URL Spotify track!*\n\nExample:\n${usedPrefix + command} https://open.spotify.com/track/3zakx7RAwdkUQlOoQ7SJRt`;
+
+  if (!/^https:\/\/open\.spotify\.com/i.test(args[0])) throw `*🚩 Hanya menerima link track Spotify!*`;
+
+  m.reply(wait);
+
+  try {
+    const res = await nessid.SPOTIFYDl(args[0]);
+    if (!res.status) throw 'Gagal mengambil lagu dari Spotify!';
+    const { title, artist, album, duration, downloadUrl } = res;
+
+    let caption = `∘ *Title*: ${title}\n∘ *Artist*: ${artist}\n∘ *Album*: ${album}\n∘ *Duration*: ${msToMinuteSecond(duration)}`;
+    await conn.sendMessage(m.chat, { text: caption }, { quoted: m });
+    await conn.sendMessage(m.chat, {
+      audio: { url: downloadUrl },
+      mimetype: 'audio/mpeg'
+    }, { quoted: m });
+  } catch (e) {
+    throw `🚩 Terjadi error saat mengambil lagu Spotify!`;
+  }
+};
+
+handler.help = ['spotify <link>'];
+handler.command = /^(spotify)$/i;
+handler.tags = ['downloader'];
+handler.limit = true;
+
+export default handler;
+
+// Helper untuk konversi ms ke menit:detik
+function msToMinuteSecond(ms) {
+  let minutes = Math.floor(ms / 60000);
+  let seconds = Math.floor((ms % 60000) / 1000);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
