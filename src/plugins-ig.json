@@ -1,0 +1,30 @@
+import nessid from 'apinessid';
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    if (!args[0]) throw `*Contoh:* ${usedPrefix}${command} https://www.instagram.com/p/ByxKbUSnubS/?utm_source=ig_web_copy_link`
+
+    try {
+        // Mengambil hasil dari nessid tanpa developer & tanpa thumbnail
+        const result = await nessid.IGDl(args[0]);
+        const limitnya = 10; // jumlah maksimal media yang dikirim ke user
+
+        for (let i = 0; i < Math.min(limitnya, result.length); i++) {
+            await sleep(3000)
+            // hanya kirim url media, tidak mengirim thumbnail dan tidak menampilkan developer
+            await conn.sendFile(m.chat, result[i].url, null, `*Instagram Downloader*`, m)
+        }
+    } catch (e) {
+        throw `*Server Down!*`
+    }
+};
+
+handler.help = ['instagram'].map(v => v + ' <url>');
+handler.tags = ['downloader'];
+handler.command = /^(ig|instagram|igdl|instagramdl|igstroy)$/i;
+handler.limit = true;
+
+export default handler;
