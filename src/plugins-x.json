@@ -1,0 +1,35 @@
+import nessid from 'apinessid';
+
+var handler = async (m, { conn, args, usedPrefix, command }) => {
+    if (!args[0]) throw `Masukkan URL!`;
+    if (!/^https?:\/\/(www\.)?(twitter\.com|x\.com)/i.test(args[0])) throw "URL Tidak Ditemukan!";
+    m.reply(wait);
+    try {
+        // Panggil API dari nessid
+        const result = await nessid.XDl(args[0]);
+        // Navigasi ke media array
+        const medias = result?.data?.data?.media || [];
+        if (!medias.length) throw "Media tidak ditemukan!";
+
+        for (const media of medias) {
+            // Kirim media (hanya ambil url gambar/video)
+            if (media.type === 'photo' && media.image) {
+                await conn.sendFile(m.chat, media.image, null, wm, m);
+            } else if (media.type === 'video' && media.videoUrl) {
+                await conn.sendFile(m.chat, media.videoUrl, null, wm, m);
+            }
+            // Jika ada tipe lain bisa ditambahkan di sini
+            await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+    } catch (e) {
+        console.log(e);
+        m.reply(`Creator account is private atau terjadi error lain.`);
+    }
+};
+
+handler.command = /^(twitterdl|twitter|xdl|x)$/i;
+handler.help = ['twitter'].map(v => v + ' <url>');
+handler.tags = ['downloader'];
+handler.limit = true;
+
+export default handler;
