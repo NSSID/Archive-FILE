@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>CDN NeastooID</title>
-  <link rel="icon" type="image/png" href="https://cdn.ness.biz.id/src/test.png">
-  <style>
-    body {
-      background-color: #000; /* Warna background hitam */
-      color: #fff;            /* Warna teks putih */
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-    }
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CDN NeastooID</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.ness.biz.id/src/test.png"
+    />
+    <!-- Tailwind CSS + DaisyUI CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        plugins: [window.daisyui],
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/daisyui@latest"></script>
+  </head>
 
-    h1 {
-      color: #00ffcc; /* Warna untuk judul agar lebih mencolok */
-    }
-
-    code {
-      background-color: #222;
-      color: #0f0;
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Selamat Datang di CDN</h1>
-  <p>Akses file melalui direktori <code>/src/test.png</code></p>
-</body>
+  <body class="min-h-screen flex items-center justify-center bg-base-100 text-base-content">
+    <div class="text-center p-6 rounded-2xl shadow-lg bg-base-200">
+      <h1 class="text-4xl font-bold text-primary mb-4">Selamat Datang di CDN NESSID</h1>
+      <p class="text-lg">
+        Akses file melalui endpoint
+        <code class="bg-neutral text-success px-2 py-1 rounded">/src/test.png</code>
+      </p>
+    </div>
+  </body>
 </html>
