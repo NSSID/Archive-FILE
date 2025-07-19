@@ -9,14 +9,22 @@
       type="image/png"
       href="https://cdn.ness.biz.id/src/test.png"
     />
-    <!-- Tailwind CSS + DaisyUI CDN -->
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DaisyUI CDN Plugin Config -->
     <script>
       tailwind.config = {
-        plugins: [window.daisyui],
+        theme: {
+          extend: {},
+        },
+        darkMode: "class",
       };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/daisyui@latest"></script>
+
+    <!-- DaisyUI Stylesheet (bukan plugin js) -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" />
   </head>
 
   <body class="min-h-screen flex items-center justify-center bg-base-100 text-base-content">
